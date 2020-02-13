@@ -1,7 +1,7 @@
 # Grocery List
 
 ## Description
-A basic HTML, Javascript, and Bootstrap driven web application that allows for a user to add, update, and remove grocery items from a list.
+A basic HTML, Javascript, and Vue.js driven web application that allows for a user to add, update, and remove grocery items from a list.
 
 ### Features
 - Add grocery items with the input box.

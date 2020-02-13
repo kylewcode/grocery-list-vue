@@ -1,4 +1,12 @@
-(function(){
+Vue.component('item-list', {
+    methods: {
+        createItems: function() {
+            alert('Component activated!')
+        }
+    }
+});
+
+/*(function(){
     "use strict";
     //Initializes the add button's functionality.
     function inputInit(){
@@ -102,11 +110,11 @@
     };
     
     //Helper function that appends multiple children to a single parent.
-    /*function appendChildren(parent, children){
+    function appendChildren(parent, children){
         children.forEach(child => {
             parent.appendChild(child);
         });
-    };*/
+    };
     
     //Helper function that creates a bootstrap div column XS
     function createColumnXS(){
@@ -122,5 +130,5 @@
         return div;
     }
     
-})();
+})();*/
 

@@ -24,33 +24,54 @@
 </body>
 
 <script>
+    const listComponent = {
+        props: {itemProp:String},
+        template:   '<li class="list-group-item"> \
+                        <div class="row"> \
+                            <div class="col-xs-10"> \
+                                <span class="text-element" spellcheck="true" autocomplete="on"></span> \
+                                <input class="quantity ml-3" type="number" step="1" min="0" style="width: 3em"> \
+                            </div> \
+                            <div class="col"> \
+                                <button class="close" type="button" aria-label="Close">X</button> \
+                            </div> \
+                        </div> \
+                    </li>'
+    };
+    
     const vm = new Vue({
         el: '#app',
-        data: {
-            userInput: ''
+        components: {
+            'list-component': listComponent
         },
-        template: '<div> \
-            <div class="text-center"> \
-                <div class="heading container-fluid bg-primary text-white pb-1 pt-2"> \
-                    <h1>Grocery List</h1> \
-                </div> \
-                <br> \
-                <div class="container-fluid shadow p-3 mb-5 bg-white rounded"> \
-                    <label for="grocery-item">Enter the grocery item to add:</label> \
-                    <input type="text" v-model:value="userInput"> \
-                    <input type="submit" value="Add" @click="createItems"> \
-                </div> \
-            </div> \
-            <div class="container text-left text-dark bg-light w-50"> \
-                <ul class="list-group" id="my-ul"></ul> \
-            </div> \
-        </div>',
+        data: {
+            userInput: '',
+            groceryItems: ['apple','pear','banana']
+        },
+        template:   '<div> \
+                        <div class="text-center"> \
+                            <div class="heading container-fluid bg-primary text-white pb-1 pt-2"> \
+                                <h1>Grocery List</h1> \
+                            </div> \
+                            <br> \
+                            <div class="container-fluid shadow p-3 mb-5 bg-white rounded"> \
+                                <label for="grocery-item">Enter the grocery item to add:</label> \
+                                <input type="text" v-model:value="userInput" @keyup.enter="createItems(userInput)"> \
+                                <input type="submit" value="Add" @click="createItems(userInput)"> \
+                            </div> \
+                        </div> \
+                        <div class="container text-left text-dark bg-light w-50"> \
+                            <div v-for="item in groceryItems"> \
+                                <list-component itemProp:="item"></list-component> \
+                            </div> \
+                        </div> \
+                    </div>',
         methods: {
-            createItems: function() {
-                return alert('Test');
-            },
+            createItems: function (userInput) {
+                this.groceryItems.push(userInput);
+            }
         }
     });
 </script>
-
+    
 </html>

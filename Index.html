@@ -29,7 +29,7 @@
         template:   '<li class="list-group-item"> \
                         <div class="row"> \
                             <div class="col-xs-10"> \
-                                <span class="text-element" spellcheck="true" autocomplete="on"></span> \
+                                <span class="text-element" spellcheck="true" autocomplete="on">{{itemProp}}</span> \
                                 <input class="quantity ml-3" type="number" step="1" min="0" style="width: 3em"> \
                             </div> \
                             <div class="col"> \
@@ -62,7 +62,7 @@
                         </div> \
                         <div class="container text-left text-dark bg-light w-50"> \
                             <div v-for="item in groceryItems"> \
-                                <list-component itemProp:="item"></list-component> \
+                                <list-component :itemProp="item"></list-component> \
                             </div> \
                         </div> \
                     </div>',

@@ -25,18 +25,45 @@
 
 <script>
     const listComponent = {
-        props: {itemProp:String},
+        data: function() {
+            return {
+                updatedInput: '',
+                isUpdating: false
+            }
+        },
+        props: {
+            itemProp: String,
+        },
         template:   '<li class="list-group-item"> \
                         <div class="row"> \
                             <div class="col-xs-10"> \
-                                <span class="text-element" spellcheck="true" autocomplete="on">{{itemProp}}</span> \
+                                <span v-if="!isUpdating" class="text-element" spellcheck="true" autocomplete="on" @click="yesUpdate">{{itemProp}}</span> \
+                                <input v-else v-focus v-model:value="updatedInput" @keyup.enter="emitUpdate(updatedInput, itemProp)"> \
                                 <input class="quantity ml-3" type="number" step="1" min="0" style="width: 3em"> \
                             </div> \
                             <div class="col"> \
-                                <button class="close" type="button" aria-label="Close">X</button> \
+                                <button class="close" type="button" aria-label="Close" @click="emitClose">X</button> \
                             </div> \
                         </div> \
-                    </li>'
+                    </li>',
+        methods: {
+            emitClose: function() {
+                this.$emit('emit-close');
+            },
+            emitUpdate: function(updatedInput, itemProp) {
+                this.$emit('emit-update', {'newItem': updatedInput, 'oldItem': itemProp});
+            },
+            yesUpdate: function() {
+                this.isUpdating = true;
+            }
+        },
+        directives: { 
+            focus: {
+                inserted: function(el) {
+                    el.focus()
+                }
+            }
+        }
     };
     
     const vm = new Vue({
@@ -46,7 +73,7 @@
         },
         data: {
             userInput: '',
-            groceryItems: ['apple','pear','banana']
+            groceryItems: []
         },
         template:   '<div> \
                         <div class="text-center"> \
@@ -56,19 +83,29 @@
                             <br> \
                             <div class="container-fluid shadow p-3 mb-5 bg-white rounded"> \
                                 <label for="grocery-item">Enter the grocery item to add:</label> \
-                                <input type="text" v-model:value="userInput" @keyup.enter="createItems(userInput)"> \
+                                <input type="text" autofocus v-model:value="userInput" @keyup.enter="createItems(userInput)"> \
                                 <input type="submit" value="Add" @click="createItems(userInput)"> \
                             </div> \
                         </div> \
                         <div class="container text-left text-dark bg-light w-50"> \
                             <div v-for="item in groceryItems"> \
-                                <list-component :itemProp="item"></list-component> \
+                                <list-component ref="listComp" :itemProp="item" @emit-close="removeItems(item)" @emit-update="startUpdate"></list-component> \
                             </div> \
                         </div> \
                     </div>',
         methods: {
             createItems: function (userInput) {
                 this.groceryItems.push(userInput);
+                this.userInput = '';
+            },
+            removeItems: function(item) {
+                const index = this.groceryItems.indexOf(item);
+                this.groceryItems.splice(index, 1);
+            },
+            startUpdate: function(obj) {
+                const index = this.groceryItems.indexOf(obj.oldItem);
+                this.groceryItems.splice(index, 1, obj.newItem);
+                this.$children[index].isUpdating = false;
             }
         }
     });
